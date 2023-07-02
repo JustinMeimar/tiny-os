@@ -43,8 +43,46 @@ static void install_isr() {
     load_idt(idt_entries, sizeof(idt_entries));
 }
 
-void handle_irq() {
-    kprint("Recieved :D");
+// void handle_irq() 
+// {
+//     uint32_t irq_code;
+
+//     char codes[2];
+//     char base = '0';
+
+//     codes[0] = ((char) irq_code) + base;
+//     codes[1] = '\0';
+
+//     __asm__ volatile (
+//         "pop %%eax\n\t"
+//         "mov %%eax, %0"
+//         : "=r"(irq_code) 
+//         :
+//         : "%eax");
+
+//     kprint("Recieved:");
+//     kprint(codes);
+// }
+
+void handle_irq() 
+{
+    char codes[2];
+    codes[1] = '\0';
+    uint32_t irq_no;
+    __asm__ (
+        "movl %%ecx, %0" 
+        : "=r"(irq_no)
+        :
+    ); // read the value from ecx register to irq_no
+    codes[0] = (char) irq_no + '0'; 
+    kprint(codes);
+    // remaining code
+}
+
+static void dump_regs()
+{
+    uint32_t irq, idt, eax;
+
 }
 
 #endif

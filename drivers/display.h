@@ -1,15 +1,27 @@
+#ifndef DISPLAY_H
+#define DISPLAY_H
+
 #include "ports.h"
+#include "../libc/stdlib.h"
 #define MAX_COLS 80
 #define MAX_ROWS 25
+#define ROW_SIZE (MAX_COLS * 2)
 #define VIDEO_MEM 0xb8000
 
-void kprint_at(const char* msg, uint8_t row, uint8_t col);
-void kprint(const char* msg);
+//INTERFACE 
+void kprint_at(const char *msg, uint8_t row, uint8_t col);
+void kprint(const char *msg);
 
-void set_cursor_index(uint16_t index);
-uint16_t get_cursor_index();
+//HIDDEN
+static void kprint_at_index(const char *msg, uint16_t index);
+void scroll();
 
-uint16_t get_cursor_index_from_coords(uint8_t row, uint8_t col);
+static void set_cursor_index(uint16_t index);
+static uint16_t get_cursor_index();
+static uint16_t get_cursor_index_from_coords(uint8_t row, uint8_t col);
 
-uint8_t get_row_from_cursor_index(uint16_t index);
-uint8_t get_col_from_cursor_index(uint16_t index);
+// convert an index back to column or row
+static uint8_t get_row_from_cursor_index(uint16_t index);
+static uint8_t get_col_from_cursor_index(uint16_t index);
+
+#endif

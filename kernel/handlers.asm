@@ -35,6 +35,8 @@ irq3:
 ; common IRQ handler code
 irq_common: 
     cld
+    mov eax, dword [esp] ;save the IRQ number 
+    mov ecx, eax ;pass IRQ as arg to handle_irq
     call handle_irq  
     add esp, 8 ;// pop the two byte pushes
     popa 
