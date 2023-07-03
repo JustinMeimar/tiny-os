@@ -2,7 +2,8 @@
 
 GateDescriptor idt_entries[256];
 
-void load_idt(void *offset, uint32_t size) {
+void load_idt(void *offset, uint32_t size)
+{
     struct {
         uint16_t size;
         void *base;

@@ -16,7 +16,6 @@ void kprint(const char* msg)
 {
     uint16_t index = get_cursor_index();
     kprint_at_index(msg, index); 
-    set_cursor_index(index + strlen(msg));
 }
 
 // Static Functions
@@ -27,13 +26,57 @@ static void kprint_at_index(const char* msg, uint16_t index)
 {
     char *video_mem = (char*) VIDEO_MEM;
 
-    uint32_t i = 0; 
+    uint32_t i = 0;
+    uint32_t line_count = get_col_from_cursor_index(index);
+
     while (msg[i] != '\0') 
-    {
+    { 
         char c = msg[i];
-        *(video_mem + (index + i ) * 2) = c;
-        *(video_mem + (index + i ) * 2 + 1) = 0x0F;
+        uint16_t char_index = (index + i) * 2;
+        uint16_t conf_index = (index + i) * 2 + 1;
+ 
+        if (char_index == MAX_COLS * MAX_ROWS * 2) {
+            scroll();
+            index -= MAX_COLS;
+            continue;
+        }
+
+        if (c == '\n' || c == '\b' || c == '\t') {
+            handle_escape_char(c, &index, &line_count);
+            i++; continue;
+        }
+
+        *(video_mem + char_index) = c;
+        *(video_mem + conf_index) = 0x0F;
+        line_count++;
         i++;
+    }
+    set_cursor_index(index + i);
+}
+
+/**
+ * Handle escape characters like newline, tab and backspace. 
+ * Mutate the index and counters 
+ */
+static void handle_escape_char(
+    const char c,
+    uint16_t *index, 
+    uint32_t *line_count)
+{
+    char *video_mem = (char*) VIDEO_MEM;
+    switch(c) {
+        case '\n':
+            *(index) += (MAX_COLS - *line_count -1); 
+            *(line_count) = 0; 
+            break;
+        case '\b':
+            *(index)-= 1;
+            *(video_mem + *(index) * 2) = ' ';
+            *(index)-= 1;
+        case '\t':
+            kprint("    ");
+        default:
+            break;
     }
 }
 
@@ -70,7 +113,6 @@ void scroll()
         i++;
     }
     set_cursor_index(get_cursor_index() - MAX_COLS);
-    kprint("done scroll");
 }
 
 /**
@@ -91,28 +133,23 @@ static void set_cursor_index(uint16_t index)
     port_byte_out(VGA_DATA_PORT, (uint8_t)(index & 0xFF));
 }
 
-/**
- * 
- * Ask the VGA via port 0x34 for the 
+/**Ask the VGA via port 0x34 for the 
  * High part of the cursor position resides in register 0x0E
  * Low part of the cursor position resides in 0x0F
  */
 static uint16_t get_cursor_index()
 {
-    /**
-     * Get high byte of the cursor index. Load regsiter 0x0E into control, 
+    /**Get high byte of the cursor index. Load regsiter 0x0E into control, 
      * then read the high byte, cast into 16-bit from 8-bit and then mask for fun :p */
     port_byte_out(VGA_CONTROL_PORT, 0x0E); //
     uint16_t cursor_high = ((uint16_t) port_byte_in(VGA_DATA_PORT) << 8);
 
-    /**
-     * Get the low byte of the cursor index. Load register 0x0F into control, 
+    /**Get the low byte of the cursor index. Load register 0x0F into control, 
      * then read the low byte, cast and mask */
     port_byte_out(VGA_CONTROL_PORT, 0x0F);
     uint16_t cursor_low = ((uint16_t) port_byte_in(VGA_DATA_PORT)) & 0x00FF;
     
-    /*
-     * Make a logical OR of the high and low to return the cursor index.*/
+    /**Make a logical OR of the high and low to return the cursor index.*/
     return (cursor_high | cursor_low);
 }
 

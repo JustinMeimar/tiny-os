@@ -1,6 +1,6 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c)
-ASM_SOURCES = $(wildcard kernel/*.asm)
-HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c cpu/*.c)
+ASM_SOURCES = $(wildcard kernel/*.asm cpu/*.asm)
+HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h cpu/*.h)
 # Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.o}
 

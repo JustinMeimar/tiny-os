@@ -1,6 +1,6 @@
 #ifndef IDT_H
 #define IDT_H
-#include "types.h"
+#include "../kernel/types.h"
 
 #define SELECTOR 0x08 // code segment
 #define ATTRIBUTES 0x8E  // attributes for 10001110
