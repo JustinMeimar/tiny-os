@@ -5,6 +5,7 @@
         "display.h": "c",
         "types.h": "c",
         "isr.h": "c",
-        "keyboard.h": "c"
+        "keyboard.h": "c",
+        "memory.h": "c"
     }
 }

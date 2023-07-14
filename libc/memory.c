@@ -2,9 +2,17 @@
 
 #define HEAP_ADDR 0x8000;
 
+void init_memory_allocator()
+{
+    void *heap_start = &_kernel_end;
+    char buf[256];
+    kprint(int_to_ascii(heap_start, buf));
+    // MemoryAllocator mem_allocator;
+    // mem_allocator.start = HEAP_ADDR;
+}
+
 void *malloc(uint32_t n_bytes)
 {
-    // uint32_t
     return 0;
 }
 

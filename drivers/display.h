@@ -3,6 +3,7 @@
 
 #include "ports.h"
 #include "../libc/stdlib.h"
+#include "../libc/memory.h"
 #define MAX_COLS 80
 #define MAX_ROWS 25
 #define ROW_SIZE (MAX_COLS * 2)

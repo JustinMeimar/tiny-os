@@ -5,5 +5,6 @@
 
 uint32_t strlen(const char *msg);
 char *int_to_ascii(uint32_t n, char *buffer);
+void reverse(char *bytes);
 
 #endif
