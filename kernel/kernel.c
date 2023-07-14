@@ -1,9 +1,10 @@
 #include "types.h"
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
+#include "../cpu/timer.h"
 #include "../drivers/display.h"
 #include "../libc/stdlib.h"
-
+// #include "../shell/shell.h"
 /**
  * Declare the array of GateDescriptors that constitute the IDT
  */
@@ -33,4 +34,5 @@ void main()
 
     init_timer(50);
     init_keyboard(); 
+    // init_shell();
 }
