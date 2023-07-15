@@ -3,13 +3,6 @@
 #include "../kernel/types.h"
 #include "./stdlib.h"
 
-typedef enum
-{
-    free = 0,
-    used = 1
-} BlockState;
-
-
 typedef struct BlockDescriptor BlockDescriptor;
 struct BlockDescriptor 
 {
@@ -27,12 +20,14 @@ extern char _kernel_end;
 
 static void *get_memory_allocator();
 void init_memory_allocator();
+
 void *malloc(uint32_t n_bytes);
+void free(void * ptr);
+
 void memcpy(void *dst, void *src, uint32_t bytes);
 void memset(void *dst, uint8_t value, uint32_t bytes);
 
 //helper 
 void dump_heap();
 void memory_test();
-
 #endif

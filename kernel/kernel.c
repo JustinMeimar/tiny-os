@@ -46,15 +46,17 @@ void main()
     blob->a = 7;
     blob->b = 4096;
     blob->c = 255;
-
+    
     void *big_space = malloc(64);
     
     BigBlob *blob2 = malloc(sizeof(BigBlob));
     blob2->a = 2;
     blob2->b = 4096;
     blob2->c = 255;
-
+    
     void *big_space2 = malloc(72);
+    
+    free(big_space);
 
     BigBlob *blob3 = malloc(sizeof(BigBlob));
     blob3->a = 7;
@@ -74,9 +76,9 @@ void main()
     kprint_int(blob2->b);
     kprint_int(blob2->c);
     
-     kprint("\nblob3: ");
+    kprint("\nblob3: ");
     kprint_int(blob3->a);
     kprint_int(blob3->b);
     kprint_int(blob3->c);
-    
+
 }
