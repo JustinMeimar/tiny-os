@@ -26,6 +26,21 @@ char *int_to_ascii(uint32_t n, char *buffer)
     return buffer;
 }
 
+char *hex_to_ascii(uint32_t n, char *buf)
+{
+    const char *hex_digits = "0123456789abcdef";
+    uint8_t i = 0;
+    do {
+        buf[i++] = hex_digits[n % 16];
+        n /= 16;
+    } while (n != 0);
+
+    buf[i] = '\0';
+    reverse(buf);
+
+    return buf;
+}
+
 void reverse(char *bytes)
 {
     uint8_t i = 0;
@@ -43,7 +58,15 @@ void reverse(char *bytes)
 
 void kprint_int(uint32_t n)
 {
-    char buf[256];
+    char buf[128];
     // kprint("\n");
     kprint(int_to_ascii(n, buf));
+}
+
+
+void kprint_hex(uint32_t n)
+{
+    char buf[32];
+    kprint("0x"); 
+    kprint(hex_to_ascii(n,buf));
 }

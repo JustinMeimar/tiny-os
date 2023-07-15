@@ -196,7 +196,6 @@ static void print_letter(uint8_t scancode)
             if (scancode <= 0x7f) {
                 kprint("Unknown key down");
             } else {
-                kprint("Unknown key up");
             }
             break;
     }

@@ -15,8 +15,7 @@ struct BlockDescriptor
 {
     void *start;
     uint32_t size; 
-    BlockDescriptor* next;
-    BlockState state; 
+    uint8_t state; // 0000 00ab ... a == free / not free, b == last / not last
 };
 
 typedef struct 
@@ -34,5 +33,6 @@ void memset(void *dst, uint8_t value, uint32_t bytes);
 
 //helper 
 void dump_heap();
+void memory_test();
 
 #endif

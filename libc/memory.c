@@ -13,31 +13,9 @@ static void *get_memory_allocator()
     return (void*)(HEAP_ADDR);
 }
 
-/*
-static void test_pointer_arithmetic() {
-    // kprint("\n=========== TEST============\n");
-    // kprint(" Base address of the memory allocator: "); 
-    // kprint_int((uint32_t)mem_allocator);
-    // kprint("\n Plus the size of a uint32_t: ");
-    // kprint_int((uint32_t)(mem_allocator + sizeof(uint32_t)));
-    // kprint("\n Size of unint32_t: ");
-    // kprint_int(sizeof(uint32_t));
-    // kprint("\n Increment Pointer");
-    // kprint("\n Base Address: ");
-    // kprint_int((uint32_t)(mem_allocator));
-    // kprint("\n Base Address + 1: ");
-    // kprint_int((uint32_t)(mem_allocator + 1));
-    
-    // kprint("\n=========== TEST============\n");
-}  
-*/ 
-
 void *malloc(uint32_t n_bytes)
 { 
     MemoryAllocator *mem_allocator = get_memory_allocator();
-       
-    kprint("\nbase of heap: ");
-    kprint_int((uint32_t)mem_allocator);
 
     void *heap_space = mem_allocator;
     if (mem_allocator->first == 0) //init the first block 
@@ -47,37 +25,30 @@ void *malloc(uint32_t n_bytes)
         BlockDescriptor *init_block = (BlockDescriptor*)(mem_allocator->first); 
         init_block->start = (void *)(init_block) + sizeof(BlockDescriptor);
         init_block->size = n_bytes;
-        init_block->state = 1; 
-        init_block->next = 0;
+        init_block->state = 0xb00000011; //used, last
 
         heap_space = init_block->start;
 
     } else {
         //traverse the block list to find the top of the heap
-        kprint("\nelse"); 
-        BlockDescriptor *cur_block = (BlockDescriptor*)mem_allocator->first; 
-        while(cur_block->next != 0) 
+        BlockDescriptor *cur_block = (BlockDescriptor*)mem_allocator->first;  //get first block on heap
+        while((cur_block->state & 0x01) != 1) //while the cur block is not last 
         {
-            if (cur_block->size < n_bytes)
-            {
-                //check if we can re-use a freed block
-            }
-            cur_block = cur_block->next;
+            void *next_block = (cur_block->start + cur_block->size);
+            cur_block = (BlockDescriptor*)next_block;
         }
 
-        //now cur_block has no following block
+        // we have found the last block
+        cur_block->state = (cur_block->state & 0xFE); //zero out the last (it is not last any more)
+        
         void* heap_top = (void *)(cur_block->start) + cur_block->size;
         BlockDescriptor *new_block = (BlockDescriptor*)heap_top;
         new_block->start = heap_top + sizeof(BlockDescriptor);
         new_block->size = n_bytes;
         new_block->state = 1;
-        new_block->next = 0;
 
         heap_space = new_block->start;
     }
-
-    kprint("\ntop of heap:");
-    kprint_int((uint32_t) heap_space);
 
     return heap_space; 
 }
@@ -104,23 +75,4 @@ void memset(void *dst, uint8_t value, uint32_t bytes)
         *((char *)dst + i) = value;
         i++;
     } 
-}
-
-void dump_heap()
-{
-    uint32_t bytes = 32; 
-    void* heap = HEAP_ADDR;
-    kprint("\n");
-    for (uint32_t i = 0; i < bytes; i+=4)
-    {
-        kprint("|");
-        kprint_int(*(uint32_t*)(heap + i));
-        kprint(" ");
-        kprint_int(*(uint32_t*)(heap + i + 1));
-        kprint(" ");
-        kprint_int(*(uint32_t*)(heap + i + 2));
-        kprint(" ");
-        kprint_int(*(uint32_t*)(heap + i + 3));
-        kprint("|\n");
-    }
 }

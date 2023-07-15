@@ -38,7 +38,7 @@ void main()
 
     typedef struct  {
         uint32_t a;
-        uint32_t b;
+        uint16_t b;
         uint8_t c;
     } BigBlob; 
 
@@ -47,37 +47,36 @@ void main()
     blob->b = 4096;
     blob->c = 255;
 
-    kprint("\nblob: ");
-    kprint_int(blob);
-    kprint_int(blob->a);
-    kprint_int(blob->b);
-    kprint_int(blob->c);
-
-    dump_heap(); 
-    kprint("==========");
-
+    void *big_space = malloc(64);
+    
     BigBlob *blob2 = malloc(sizeof(BigBlob));
     blob2->a = 2;
     blob2->b = 4096;
-    blob2->c = 321;
+    blob2->c = 255;
 
+    void *big_space2 = malloc(72);
+
+    BigBlob *blob3 = malloc(sizeof(BigBlob));
+    blob3->a = 7;
+    blob3->b = 8;
+    blob3->c = 9;
+
+    kprint("big space:");
+    kprint_hex(big_space);
+    
+    kprint("\nblob: ");
+    kprint_int(blob->a);
+    kprint_int(blob->b);
+    kprint_int(blob->c);
+ 
     kprint("\nblob2: ");
-    kprint_int(blob2);
     kprint_int(blob2->a);
     kprint_int(blob2->b);
     kprint_int(blob2->c);
     
-    // kprint("\n==========");
+     kprint("\nblob3: ");
+    kprint_int(blob3->a);
+    kprint_int(blob3->b);
+    kprint_int(blob3->c);
     
-    // BigBlob *blob3 = malloc(sizeof(BigBlob));
-    // blob3->a = 2;
-    // blob3->b = 4096;
-    // blob3->c = 321;
-
-    // kprint("\nblob2: ");
-    // kprint_int(blob2);
-    // kprint_int(blob2->a);
-    // kprint_int(blob2->b);
-    // kprint_int(blob2->c);
-
 }
