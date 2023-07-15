@@ -40,3 +40,10 @@ void reverse(char *bytes)
         j--;
     }
 }
+
+void kprint_int(uint32_t n)
+{
+    char buf[256];
+    // kprint("\n");
+    kprint(int_to_ascii(n, buf));
+}

@@ -29,11 +29,55 @@ static void startup_msg()
 void main() 
 {   
     startup_msg();
-
     install_isr(); 
     asm volatile ("sti");
 
     init_timer(50);
     init_keyboard(); 
     init_memory_allocator(); 
+
+    typedef struct  {
+        uint32_t a;
+        uint32_t b;
+        uint8_t c;
+    } BigBlob; 
+
+    BigBlob *blob = malloc(sizeof(BigBlob));
+    blob->a = 7;
+    blob->b = 4096;
+    blob->c = 255;
+
+    kprint("\nblob: ");
+    kprint_int(blob);
+    kprint_int(blob->a);
+    kprint_int(blob->b);
+    kprint_int(blob->c);
+
+    dump_heap(); 
+    kprint("==========");
+
+    BigBlob *blob2 = malloc(sizeof(BigBlob));
+    blob2->a = 2;
+    blob2->b = 4096;
+    blob2->c = 321;
+
+    kprint("\nblob2: ");
+    kprint_int(blob2);
+    kprint_int(blob2->a);
+    kprint_int(blob2->b);
+    kprint_int(blob2->c);
+    
+    // kprint("\n==========");
+    
+    // BigBlob *blob3 = malloc(sizeof(BigBlob));
+    // blob3->a = 2;
+    // blob3->b = 4096;
+    // blob3->c = 321;
+
+    // kprint("\nblob2: ");
+    // kprint_int(blob2);
+    // kprint_int(blob2->a);
+    // kprint_int(blob2->b);
+    // kprint_int(blob2->c);
+
 }
