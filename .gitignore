@@ -1,4 +1,5 @@
 kernel.elf
-cmds.md
-questions.md
 *.o
+questions.md 
+cmds.md
+cmds.sh
