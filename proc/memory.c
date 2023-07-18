@@ -60,6 +60,8 @@ void *malloc(uint32_t n_bytes)
 
         kprint("-- block id:");
         kprint_hex(init_block->id);
+        kprint(" allocated blocks: ");
+        kprint_hex(mem_info->allocated_blocks);
         kprint("\n");
         
         return init_block->start;
@@ -78,11 +80,15 @@ void *malloc(uint32_t n_bytes)
                 {
                     memset(cur_block->start, 0, cur_block->size);
                     cur_block->state = (cur_block->state & 0xFD);
-                    
+                                    
+                    mem_info->allocated_bytes += n_bytes;
+                    mem_info->allocated_blocks++;
+
                     kprint("-- block id:");
                     kprint_hex(cur_block->id);
+                    kprint(" allocated blocks: ");
+                    kprint_hex(mem_info->allocated_blocks);
                     kprint("\n");
-
                     return cur_block->start;
                 }
             }
@@ -105,9 +111,9 @@ void *malloc(uint32_t n_bytes)
         
         kprint("-- block id:");
         kprint_hex(new_block->id);
-        // kprint(" allocated blocks: ");
-        // kprint_hex(mem_info->allocated_blocks);
-        // kprint("\n");
+        kprint(" allocated blocks: ");
+        kprint_hex(mem_info->allocated_blocks);
+        kprint("\n");
         
         return new_block->start;
     }

@@ -4,7 +4,6 @@
  * port mapped IO
  * in ~= load 
  * out ~= store
- * 
  */
 
 /**

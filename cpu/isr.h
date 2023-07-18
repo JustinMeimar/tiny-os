@@ -2,7 +2,7 @@
 #define ISR_H
 
 #include "idt.h"
-#include "../drivers/display.h"
+#include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
 
 /**

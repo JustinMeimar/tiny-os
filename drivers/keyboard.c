@@ -17,6 +17,38 @@ static void keyboard_callback(registers_t r)
 
 static void print_letter(uint8_t scancode) 
 {
+    switch (scancode ) {
+        case 0x30:
+            kprint("B");
+            return; 
+        case 0x31:
+            kprint("N");
+            return; 
+        case 0x32:
+            kprint("M");
+            return; 
+        case 0x33:
+            kprint(",");
+            return; 
+        case 0x34:
+            kprint(".");
+            return; 
+        case 0x35:
+            kprint("/");
+            return; 
+        case 0x36:
+            kprint("Rshift");
+            return; 
+        case 0x37:
+            kprint("Keypad *");
+            return; 
+        case 0x38:
+            kprint("LAlt");
+            return; 
+        case 0x39:
+            kprint(" "); 
+            return; 
+    }
     switch (scancode) {
         case 0x0:
             kprint("ERROR");
@@ -162,36 +194,7 @@ static void print_letter(uint8_t scancode)
 		case 0x2F:
 			kprint("V");
 			break;
-        case 0x30:
-            kprint("B");
-            break;
-        case 0x31:
-            kprint("N");
-            break;
-        case 0x32:
-            kprint("M");
-            break;
-        case 0x33:
-            kprint(",");
-            break;
-        case 0x34:
-            kprint(".");
-            break;
-        case 0x35:
-            kprint("/");
-            break;
-        case 0x36:
-            kprint("Rshift");
-            break;
-        case 0x37:
-            kprint("Keypad *");
-            break;
-        case 0x38:
-            kprint("LAlt");
-            break;
-        case 0x39:
-            kprint(" ");
-            break;
+        
         default:
             if (scancode <= 0x7f) {
                 kprint("Unknown key down");

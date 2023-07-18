@@ -1,7 +1,4 @@
 #include "timer.h"
-#include "../drivers/display.h"
-#include "../libc/stdlib.h"
-#include "isr.h"
 
 uint32_t tick = 0;
 

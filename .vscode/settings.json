@@ -7,6 +7,8 @@
         "isr.h": "c",
         "keyboard.h": "c",
         "memory.h": "c",
-        "process.h": "c"
+        "process.h": "c",
+        "tests.h": "c",
+        "stdlib.h": "c"
     }
 }

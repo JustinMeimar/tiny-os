@@ -26,6 +26,7 @@ typedef struct
     MemoryInfo mem_info;
 } MemoryAllocator;
 
+
 extern char _kernel_end;
 
 static void *init_memory_allocator();
@@ -41,4 +42,5 @@ void memset(void *dst, uint8_t value, uint32_t bytes);
 //helper 
 void dump_heap();
 void memory_test();
+
 #endif

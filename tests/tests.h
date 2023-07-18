@@ -1,8 +1,9 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#include "../drivers/display.h"
+// #include "../kernel/types.h"
+// #include "../drivers/display.h"
 
-int test_prints();
+// void test_kprint_str(const char * str);
 
 #endif 

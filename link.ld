@@ -4,6 +4,6 @@ SECTIONS
     .text : { *(.text)}
     .data : { *(.data)}
     .bss  : { *(.bss)}
-    . = ALIGN(4096); 
+    . = 0x90000; 
     _kernel_end = .;
 }
