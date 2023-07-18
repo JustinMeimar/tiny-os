@@ -4,7 +4,9 @@
 #include "../cpu/timer.h"
 #include "../drivers/display.h"
 #include "../libc/stdlib.h"
-#include "../libc/memory.h"
+#include "../proc/memory.h"
+#include "../proc/process.h"
+#include "../tests/tests.h"
 
 /**
  * Declare the array of GateDescriptors that constitute the IDT
@@ -26,7 +28,9 @@ static void startup_msg()
     kprint("\n\n");
 }
 
-void main() 
+static void malloc_test();
+
+void enter_kernel() 
 {   
     startup_msg();
     install_isr(); 
@@ -34,8 +38,56 @@ void main()
 
     init_timer(50);
     init_keyboard(); 
-    init_memory_allocator(); 
 
+    if (test_prints() == 1) {
+        kprint("tests returned 1\n");
+    } else {
+        kprint("tests returned 0\n");
+    }
+    // malloc_test();
+
+    // init_system_d();
+}
+
+static void malloc_test()
+{
+
+    // for (int i = 0; i < 1; i++) {
+    //     kprint("malloc 64k: "); 
+    //     kprint_hex(i);
+    //     kprint("\n");
+
+    //     void *ptr = malloc(64000);
+    //     free(ptr);
+    // }
+
+    void *ptr_1 = malloc(16);
+    // memset(ptr_1, 1, 16);
+    void *ptr_2 = malloc(16);
+    // memset(ptr_2, 1, 16);
+    free(ptr_1); 
+    void *ptr_3 = malloc(16);
+    // memset(ptr_3, 1, 16);
+    void *ptr_4 = malloc(16);
+
+
+    // for (uint32_t i = 0; i < 10; i++) {
+    //     void *recycle_me = malloc(16);
+    //     // memset(recycle_me, 69, 1024);
+    //     // memset(recycle_me, 1, 16);
+    //     free(recycle_me);
+    // }
+    // kprint_hex((uint32_t)&_kernel_end);
+    // while(1)
+    // {
+    //     kprint("testing malloc\n");
+    //     void *ptr = malloc(8);
+    //     sleep(100);
+    // }
+}
+
+static void malloc_test2()
+{
     typedef struct  {
         uint32_t a;
         uint16_t b;
@@ -64,7 +116,7 @@ void main()
     blob3->c = 9;
 
     kprint("big space:");
-    kprint_hex(big_space);
+    kprint_hex((uint32_t)big_space);
     
     kprint("\nblob: ");
     kprint_int(blob->a);
@@ -81,4 +133,8 @@ void main()
     kprint_int(blob3->b);
     kprint_int(blob3->c);
 
+    free(blob);
+    free(blob2);
+    free(big_space2);
+    free(blob3);
 }

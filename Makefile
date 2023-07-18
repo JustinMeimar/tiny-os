@@ -1,6 +1,6 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c cpu/*.c)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c cpu/*.c proc/*.c tests/*.c)
 ASM_SOURCES = $(wildcard kernel/*.asm cpu/*.asm)
-HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h cpu/*.h)
+HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h cpu/*.h proc/*.h tests/*.h)
 # Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.o}
 
@@ -33,8 +33,14 @@ debug: os-image.bin kernel.elf
 	qemu-system-i386 -s -S -fda os-image.bin &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
-# Generic rules for wildcards
-# To make an object, always compile from its .c
+DUMP_DIR = dump
+
+dump-asm: ${C_SOURCES:.c=.s}
+	mv *.s $(DUMP_DIR)
+
+%.s: %.c ${HEADERS}
+	${CC} ${CFLAGS} -ffreestanding -S $< -o $@
+
 %.o: %.c ${HEADERS}
 	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
 
@@ -47,3 +53,4 @@ debug: os-image.bin kernel.elf
 clean:
 	rm -rf *.bin *.dis *.o os-image.bin *.elf
 	find . -type f -name "*.o" -exec rm -f {} \;
+	find . -type f -name "*.s" -exec rm -f {} \;

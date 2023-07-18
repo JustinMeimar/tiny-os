@@ -27,3 +27,12 @@ void init_timer(uint32_t freq) {
     port_byte_out(0x40, low);
     port_byte_out(0x40, high);
 }
+
+void sleep(uint32_t n)
+{
+    uint32_t cur_time = tick;
+    while(tick < (cur_time + n))
+    {
+        continue;
+    }
+}

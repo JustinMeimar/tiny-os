@@ -6,8 +6,12 @@
  */
 void kprint_at(const char* msg, uint8_t row, uint8_t col)
 {
+    uint16_t cursor = get_cursor_index();
+
     uint16_t index = get_cursor_index_from_coords(row, col);
     kprint_at_index(msg, index); 
+    
+    set_cursor_index(cursor);
 }
 /**
  * Print message at cursor position 
